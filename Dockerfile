@@ -6,6 +6,9 @@ COPY ./frontend/package.json ./frontend/pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm install
 
 COPY ./frontend ./
+RUN npm install csurf
+run npm install cookie-parser
+
 RUN pnpm run build
 
 FROM node:18-alpine AS backend
@@ -13,6 +16,8 @@ FROM node:18-alpine AS backend
 WORKDIR /app/backend
 
 COPY ./backend/package.json ./backend/pnpm-lock.yaml ./
+RUN npm install csurf
+run npm install cookie-parser
 RUN npm install -g pnpm && pnpm install
 
 COPY ./backend ./

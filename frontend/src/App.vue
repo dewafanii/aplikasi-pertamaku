@@ -7,13 +7,13 @@ const users = ref(null);
 const newEmail = ref('');
 const csrfToken = ref('');
 
-// Function to get the CSRF token from the server
+
 const getCsrfToken = async () => {
   const response = await fetch('http://localhost:3000/api/csrf-token', {
-    credentials: 'include', // Include credentials for CORS
+    credentials: 'include', 
   });
   const data = await response.json();
-  csrfToken.value = data.csrfToken; // Store the CSRF token
+  csrfToken.value = data.csrfToken; 
 };
 
 // Function to fetch user information based on user ID
@@ -28,14 +28,14 @@ const changeEmail = async () => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-CSRF-Token': csrfToken.value, // Include CSRF token in headers
+      'X-CSRF-Token': csrfToken.value, 
     },
-    body: JSON.stringify({ email: newEmail.value }), // Send email in JSON format
+    body: JSON.stringify({ email: newEmail.value }), 
   });
 };
 
 onMounted(() => {
-  getCsrfToken(); // Fetch CSRF token when the component mounts
+  getCsrfToken(); 
 });
 </script>
 
