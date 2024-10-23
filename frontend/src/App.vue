@@ -1,25 +1,42 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import CommentSection from './components/CommentSection.vue';
 
 const userId = ref('');
 const users = ref(null);
 const newEmail = ref('');
+const csrfToken = ref('');
 
+// Function to get the CSRF token from the server
+const getCsrfToken = async () => {
+  const response = await fetch('http://localhost:3000/api/csrf-token', {
+    credentials: 'include', // Include credentials for CORS
+  });
+  const data = await response.json();
+  csrfToken.value = data.csrfToken; // Store the CSRF token
+};
+
+// Function to fetch user information based on user ID
 const getUser = async () => {
   const response = await fetch(`http://localhost:3000/api/user/${userId.value}`);
   users.value = await response.json();
 };
 
+// Function to change the user's email
 const changeEmail = async () => {
-  await fetch('http://localhost:3000/api/change-email', {
+  await fetch(`http://localhost:3000/api/user/${userId.value}/change-email`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': csrfToken.value, // Include CSRF token in headers
     },
-    body: `email=${newEmail.value}`,
+    body: JSON.stringify({ email: newEmail.value }), // Send email in JSON format
   });
 };
+
+onMounted(() => {
+  getCsrfToken(); // Fetch CSRF token when the component mounts
+});
 </script>
 
 <template>
@@ -44,3 +61,7 @@ const changeEmail = async () => {
     </form>
   </div>
 </template>
+
+<style scoped>
+/* Add any additional styling here */
+</style>
