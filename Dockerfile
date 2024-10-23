@@ -15,10 +15,11 @@ FROM node:18-alpine AS backend
 WORKDIR /app/backend
 
 COPY ./backend/package.json ./backend/pnpm-lock.yaml ./
+
+RUN npm install csurf cookie-parser
 RUN npm install -g pnpm && pnpm install
 
 
-RUN npm install csurf cookie-parser
 
 COPY ./backend ./
 
