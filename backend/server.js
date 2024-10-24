@@ -15,7 +15,7 @@ app.use(cookieParser());
 // CORS configuration
 app.use(
   cors({
-    origin: "http://20.70.213.43/reinaldy", 
+    origin: "http://20.92.224.237/reinaldy", 
     optionsSuccessStatus: 200,
     credentials: true, 
   })
